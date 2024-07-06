@@ -10,7 +10,7 @@ const GlobalProvider = ({ children }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
-        getCurrentUser
+        getCurrentUser()
         .then((res)=>{
             if(res){
                 setUser(res);
