@@ -1,14 +1,22 @@
-import { View, Text, FlatList, Image } from 'react-native'
+import { View, Text, FlatList, Image, RefreshControl } from 'react-native'
 import React from 'react'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { images } from '../../constants';
 import SearchInput from '../../components/SearchInput';
+import Trending from '../../components/Trending';
+import EmptyState from '../../components/EmptyState';
 
 const Home = () => {
+  const [refreshing, setRefreshing] = React.useState(false);
+  const onRefresh = async () => {
+    setRefreshing(true);
+    // fetch data
+    setRefreshing(false);
+  }
   return (
-    <SafeAreaView className="bg-primary">
+    <SafeAreaView className="bg-primary h-full">
       <FlatList
-        data={[{id: 'a'}, {id: 'b'}]}
+        data={[]}
         keyExtractor={(item) => item.id}
         renderItem={({item}) => <Text className="text-3xl text-white">{item.id}</Text>}
         ListHeaderComponent={() => (
@@ -27,11 +35,30 @@ const Home = () => {
               </View>
             </View>
 
-            <SearchInput/>
+            <SearchInput />
+
+            <View className="w-fill flex-1 pt-5 pb-8">
+              <Text className="font-pregular text-lg text-gray-100 mb-3">Latest Vedios</Text>
+
+              <Trending
+                posts={[] ?? []}
+              />
+            </View>
           </View>
         )}
+        ListEmptyComponent={() => (
+          <EmptyState
+            title="No vedios found"
+            subtitle="Be the first to upload a vedio!"
+          />
+        )}
+        refreshControl={
+          <RefreshControl 
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+          />
+        }
       />
-      <Text>Home</Text>
     </SafeAreaView>
   )
 }
